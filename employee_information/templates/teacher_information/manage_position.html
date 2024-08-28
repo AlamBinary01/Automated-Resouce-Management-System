@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <form action="" id="announcement-form">
+        <input type="hidden" name="id" value="{% if announcement.pk %}{{ announcement.pk }}{% endif %}">
+        <div class="form-group mb-3">
+            <label for="title" class="control-label">Title</label>
+            <input type="text" name="title" id="title" class="form-control form-control-sm rounded-0" value="{% if announcement.title %}{{ announcement.title }}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="description" class="control-label">Description</label>
+            <textarea rows="5" name="description" id="description" class="form-control form-control-sm rounded-0" required>{% if announcement.description %}{{ announcement.description }}{% endif %}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        {% if announcement.pk %}
+        <button type="button" id="delete-announcement" class="btn btn-danger">Delete</button>
+        {% endif %}
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#announcement-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this);
+            $('.err-msg').remove();
+            var el = $('<div>');
+            el.addClass("alert alert-danger err-msg");
+            el.hide();
+
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{ csrf_token }}'
+                },
+                url: "{% url 'save-announcement' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err);
+                    alert_toast("An error occurred", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp === 'object' && resp.status === 'success') {
+                        el.removeClass("alert alert-danger err-msg");
+                        location.reload();
+                    } else if (resp.status === 'failed' && !!resp.msg) {
+                        el.text(resp.msg);
+                    } else {
+                        el.text("An error occurred");
+                        end_loader();
+                        console.error(resp);
+                    }
+                    _this.prepend(el);
+                    el.show('slow');
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader();
+                }
+            });
+        });
+
+        $('#delete-announcement').click(function() {
+            if (confirm('Are you sure you want to delete this announcement?')) {
+                var id = $('input[name="id"]').val();
+                $.ajax({
+                    headers: {
+                        "X-CSRFToken": '{{ csrf_token }}'
+                    },
+                    url: "{% url 'delete-announcement' %}",
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    dataType: 'json',
+                    success: function(resp) {
+                        if (resp.status === 'success') {
+                            alert_toast("Announcement deleted", 'success');
+                            location.reload();
+                        } else {
+                            alert_toast("Failed to delete announcement", 'error');
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        alert_toast("An error occurred", 'error');
+                    }
+                });
+            }
+        });
+    });
+</script>

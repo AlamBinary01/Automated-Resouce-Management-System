@@ -1,0 +1,110 @@
+<div class="container-fluid">
+    <form action="" id="attendance-form">
+        <input type="hidden" name="id" value="{% if attendance.pk %}{{ attendance.pk }}{% endif %}">
+        <div class="form-group mb-3">
+            <label for="student" class="control-label">Student</label>
+            <select name="student" id="student" class="form-control form-control-sm rounded-0" required>
+                {% for student in students %}
+                    <option value="{{ student.pk }}" {% if attendance.student.pk == student.pk %}selected{% endif %}>{{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label for="date" class="control-label">Date</label>
+            <input type="date" name="date" id="date" class="form-control form-control-sm rounded-0" value="{% if attendance.date %}{{ attendance.date|date:'Y-m-d' }}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="status" class="control-label">Status</label>
+            <select name="status" id="status" class="form-control form-control-sm rounded-0" required>
+                <option value="Present" {% if attendance.status == 'Present' %}selected{% endif %}>Present</option>
+                <option value="Absent" {% if attendance.status == 'Absent' %}selected{% endif %}>Absent</option>
+                <option value="Leave" {% if attendance.status == 'Leave' %}selected{% endif %}>Leave</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        {% if attendance.pk %}
+        <button type="button" id="delete-attendance" class="btn btn-danger">Delete</button>
+        {% endif %}
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#attendance-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this);
+            $('.err-msg').remove();
+            var el = $('<div>');
+            el.addClass("alert alert-danger err-msg");
+            el.hide();
+
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{ csrf_token }}'
+                },
+                url: "{% url 'save-attendance' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err);
+                    alert_toast("An error occurred", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp === 'object' && resp.status === 'success') {
+                        el.removeClass("alert alert-danger err-msg");
+                        location.reload();
+                    } else if (resp.status === 'failed' && !!resp.msg) {
+                        el.text(resp.msg);
+                    } else {
+                        el.text("An error occurred");
+                        end_loader();
+                        console.error(resp);
+                    }
+                    _this.prepend(el);
+                    el.show('slow');
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader();
+                }
+            });
+        });
+
+        $('#delete-attendance').click(function() {
+            if (confirm('Are you sure you want to delete this attendance record?')) {
+                var id = $('input[name="id"]').val();
+                $.ajax({
+                    headers: {
+                        "X-CSRFToken": '{{ csrf_token }}'
+                    },
+                    url: "{% url 'delete-attendance' %}",
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    dataType: 'json',
+                    success: function(resp) {
+                        if (resp.status === 'success') {
+                            alert_toast("Attendance record deleted", 'success');
+                            location.reload();
+                        } else {
+                            alert_toast("Failed to delete attendance record", 'error');
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        alert_toast("An error occurred", 'error');
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,76 @@
+{% extends "teacher_information/baseU.html" %}
+{% load humanize %}
+
+{% block head %}
+<style>
+    .news-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+
+    .news-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .news-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .news-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+        text-decoration: none;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .news-title:hover {
+        text-decoration: underline;
+    }
+
+    .news-description {
+        font-size: 1em;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .news-source {
+        font-size: 0.9em;
+        color: #999;
+    }
+</style>
+{% endblock %}
+
+{% block pageContent %}
+
+<!-- Educational News Section -->
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="card-inner">
+            <h5 class="card-title">Educational News</h5>
+            <div class="news-container">
+                {% for article in news_articles %}
+                    <div class="news-item">
+                        <a href="{{ article.url }}" target="_blank" class="news-title">{{ article.title }}</a>
+                        <p class="news-description">{{ article.description }}</p>
+                        <p class="news-source"><strong>Source:</strong> {{ article.source.name }}</p>
+                    </div>
+                {% empty %}
+                    <div class="news-item">
+                        <p>No news articles available.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %}

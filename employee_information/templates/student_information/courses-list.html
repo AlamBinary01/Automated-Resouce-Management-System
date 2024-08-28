@@ -1,0 +1,50 @@
+{% extends "student_information/base-student.html" %}
+
+{% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">View Courses</h4>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="5%">
+                    <col width="30%">
+                    <col width="30%">
+                    <col width="15%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">Course Name</th>
+                        <th class="text-center py-1">Description</th>
+                        <th class="text-center py-1">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{ course.id }}</td>
+                        <td class="px-2 py-1 text-start">{{ course.name }}</td>
+                        <td class="px-2 py-1 text-start">{{ course.description }}</td>
+                        <td class="px-2 py-1 text-center">
+                            {% if course.status == 1 %}
+                            <span class="badge bg-primary rounded-pill px-3">Active</span>
+                            {% else %}
+                            <span class="badge bg-secondary rounded-pill px-3">Inactive</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

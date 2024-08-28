@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <form action="" id="maintenance-task-form">
+        <input type="hidden" name="id" value="{% if task.pk %}{{task.pk}}{% endif %}">
+        <div class="form-group mb-3">
+            <label for="equipment" class="control-label">Equipment</label>
+            <select name="equipment" id="equipment" class="form-control form-control-sm rounded-0" required>
+                {% for equipment in equipment_list %}
+                    <option value="{{ equipment.pk }}" {% if task.equipment.pk == equipment.pk %}selected{% endif %}>{{ equipment.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label for="task_name" class="control-label">Task Name</label>
+            <input type="text" name="task_name" id="task_name" class="form-control form-control-sm rounded-0" value="{% if task.task_name %}{{ task.task_name }}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="scheduled_date" class="control-label">Scheduled Date</label>
+            <input type="date" name="scheduled_date" id="scheduled_date" class="form-control form-control-sm rounded-0" value="{% if task.scheduled_date %}{{ task.scheduled_date }}{% endif %}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="completed" class="control-label">Completed</label>
+            <select name="completed" id="completed" class="form-control form-control-sm rounded-0" required>
+                <option value="True" {% if task.completed %}selected{% endif %}>Yes</option>
+                <option value="False" {% if not task.completed %}selected{% endif %}>No</option>
+            </select>
+        </div>
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#maintenance-task-form').submit(function(e) {
+            e.preventDefault();
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if (_this[0].checkValidity() == false) {
+                _this[0].reportValidity();
+                return false;
+            }
+            start_loader();
+            $.ajax({
+                headers: {
+                    "X-CSRFToken": '{{csrf_token}}'
+                },
+                url: "{% url 'save-maintenance-task-page' %}",
+                data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+                error: err => {
+                    console.log(err)
+                    alert_toast("An error occurred", 'error');
+                    end_loader();
+                },
+                success: function(resp) {
+                    if (typeof resp == 'object' && resp.status == 'success') {
+                        el.removeClass("alert alert-danger err-msg")
+                        location.reload()
+                    } else if (resp.status == 'failed' && !!resp.msg) {
+                        el.text(resp.msg)
+                    } else {
+                        el.text("An error occurred", 'error');
+                        end_loader();
+                        console.err(resp)
+                    }
+                    _this.prepend(el)
+                    el.show('slow')
+                    $("html, body, .modal").scrollTop(0);
+                    end_loader()
+                }
+            })
+        })
+    })
+</script>

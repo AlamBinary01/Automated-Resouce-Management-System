@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Employee Information System</title>
+    <link rel="stylesheet" href="{% static 'employee_information/assets/bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <br>
+    <center><h4>User Signup Page</h4></center>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="row">
+                    <!-- Personal Information Section -->
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header text-center">
+                                <h3>Personal Information</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="first_name">First Name</label>
+                                        <input type="text" class="form-control" id="first_name" name="first_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last_name">Last Name</label>
+                                        <input type="text" class="form-control" id="last_name" name="last_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="date_of_birth">Date of Birth</label>
+                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gender">Gender</label>
+                                        <select class="form-control" id="gender" name="gender">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact_number">Contact Number</label>
+                                        <input type="text" class="form-control" id="contact_number" name="contact_number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Information Section -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h3>Account Information</h3>
+                            </div>
+                            <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password1">Password</label>
+                                        <input type="password" class="form-control" id="password1" name="password1" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password2">Confirm Password</label>
+                                        <input type="password" class="form-control" id="password2" name="password2" required>
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                                    <br><br><br>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'employee_information/assets/default/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'employee_information/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

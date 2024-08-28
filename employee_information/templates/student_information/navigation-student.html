@@ -1,0 +1,41 @@
+{% load static %}
+<!-- partial:partials/_sidebar.html -->
+<aside class="mdc-drawer mdc-drawer--dismissible mdc-drawer--open">
+    <div class="mdc-drawer__header border-bottom border-light">
+        <a href="" class="brand-logo">
+            <h3 class="text-center text-light">Student View</h3>
+        </a>
+    </div>
+    <div class="mdc-drawer__content">
+        <div class="mdc-list-group">
+            <nav class="mdc-list mdc-drawer-menu">
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" href="{% url 'home-page'%}">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">home</i> Home
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" href="{% url 'course_list' %}">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">announcement</i>Courses List
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" href="{% url 'announcement_list' %}">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">event</i>Announcement List
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" href="{% url 'student-department-list'%}">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">event</i>Department List
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" href="{% url 'educational-news-list'%}">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">notifications</i>Educational News
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</aside>
+<!-- partial -->

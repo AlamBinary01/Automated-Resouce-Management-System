@@ -1,0 +1,50 @@
+{% extends "student_information/base-student.html" %}
+{% load humanize %}
+{% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="d-flex justify-content-between">
+            <h4 class="card-title mb-0">Home Page | Student </h4>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <hr class="w-100">
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+    <div class="mdc-card info-card info-card--success">
+        <div class="card-inner">
+            <h5 class="card-title">Courses Offered</h5>
+            <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_courses|intcomma }}</h5>
+            <p class="tx-12 text-muted">Overall Count of Courses</p>
+            <div class="card-icon-wrapper">
+                <i class="material-icons">business</i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+    <div class="mdc-card info-card info-card--primary">
+        <div class="card-inner">
+            <h5 class="card-title">Total Department</h5>
+            <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ total_depa|intcomma }}</h5>
+            <p class="tx-12 text-muted">Overall Count of Department</p>
+            <div class="card-icon-wrapper">
+                <i class="material-icons">list</i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+    <div class="mdc-card info-card info-card--warning">
+        <div class="card-inner">
+            <h5 class="card-title">Quote of the Day</h5>
+            <blockquote class="blockquote">
+                <p class="mb-0">{{ quote }}</p>
+                <br>
+                <footer class="blockquote-footer">{{ author }}</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %}
